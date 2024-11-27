@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+#Files created by program
+config.json
+retrolauncher.log
+retrolauncher.log.1
