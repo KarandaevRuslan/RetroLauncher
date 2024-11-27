@@ -23,25 +23,19 @@ public class EmulatorSelectionController implements IController {
   @FXML private VBox emulatorButtonContainer;
   @FXML private Button cancelButton;
 
-  private RomFile selectedRom;
-  private List<Emulator> compatibleEmulators;
-
-  public void setSelectedRomAndCompatibleEmulators(
-      RomFile rom, List<Emulator> compatibleEmulators) {
-    this.selectedRom = rom;
-    this.compatibleEmulators = compatibleEmulators;
-    populateEmulatorButtons();
-  }
-
   @FXML
   public void initialize() {}
 
   /** Populates the VBox with buttons for each emulator that supports the selected ROM. */
-  private void populateEmulatorButtons() {
+  public void populateEmulatorButtons(List<Emulator> compatibleEmulators, RomFile selectedRom) {
     for (Emulator emulator : compatibleEmulators) {
       Button emulatorButton = new Button(emulator.getName());
       emulatorButton.setMaxWidth(Double.MAX_VALUE);
-      emulatorButton.setOnAction(event -> launchRomWithEmulator(emulator));
+      emulatorButton.setOnAction(
+          event -> {
+            launchRomWithEmulator(getClass(), emulator, selectedRom);
+            closeWindow();
+          });
       emulatorButtonContainer.getChildren().add(emulatorButton);
     }
   }
@@ -50,8 +44,9 @@ public class EmulatorSelectionController implements IController {
    * Launches the ROM with the selected emulator using stored launch parameters.
    *
    * @param emulator The selected emulator.
+   * @param rom The selected game.
    */
-  private void launchRomWithEmulator(Emulator emulator) {
+  public static void launchRomWithEmulator(Class<?> clazz, Emulator emulator, RomFile rom) {
     try {
       // Build command with parameters
       List<String> command = new ArrayList<>();
@@ -61,20 +56,19 @@ public class EmulatorSelectionController implements IController {
       String emulatorArgs = emulator.getLaunchParameters().getLaunchParameters();
 
       // Get ROM's launch parameters for this emulator
-      LaunchParameters romLaunchParams = selectedRom.getLaunchParameters().get(emulator.getId());
+      LaunchParameters romLaunchParams = rom.getLaunchParameters().get(emulator.getId());
       String romArgs = (romLaunchParams != null) ? romLaunchParams.getLaunchParameters() : "";
 
       // Combine and replace placeholders
       String combinedArgs =
-          combineAndReplacePlaceholders(
-              emulatorArgs, romArgs, selectedRom.getFilePath().getAbsolutePath());
+          combineAndReplacePlaceholders(emulatorArgs, romArgs, rom.getFilePath().getAbsolutePath());
 
       // Split arguments and add to command
       command.addAll(parseArguments(combinedArgs));
 
       // If no arguments, add ROM path by default
       if (command.size() == 1) {
-        command.add(selectedRom.getFilePath().getAbsolutePath());
+        command.add(rom.getFilePath().getAbsolutePath());
       }
 
       // Set up the process builder
@@ -84,16 +78,14 @@ public class EmulatorSelectionController implements IController {
       // Start the process
       Process process = pb.start();
       LogManager.getLogger()
-          .info("Launched emulator: " + emulator.getName() + " with ROM: " + selectedRom.getName());
-
-      closeWindow();
+          .info("Launched emulator: " + emulator.getName() + " with ROM: " + rom.getName());
 
     } catch (IOException e) {
       e.printStackTrace();
       LogManager.getLogger().severe("Failed to launch emulator: " + e.getMessage());
       Alert alert =
           Main.getAlert(
-              getClass(),
+              clazz,
               Alert.AlertType.WARNING,
               LanguageManager.getResourceBundle().getString("alert.launch.failed.title"),
               null,
@@ -110,18 +102,18 @@ public class EmulatorSelectionController implements IController {
    * @param romAbsolutePath The absolute path to ROM.
    * @return The combined and processed argument string.
    */
-  private String combineAndReplacePlaceholders(
+  private static String combineAndReplacePlaceholders(
       String emulatorArgs, String romArgs, String romAbsolutePath) {
     String combinedArgs;
-    if (romArgs.contains("{emulator}")) {
-      combinedArgs = romArgs.replace("{emulator}", emulatorArgs);
+    if (romArgs.contains("{emu}")) {
+      combinedArgs = romArgs.replace("{emu}", emulatorArgs);
     } else {
       combinedArgs = emulatorArgs + " " + romArgs;
     }
     if (combinedArgs.contains("{rom}")) {
-      combinedArgs = combinedArgs.replace("{rom}", romAbsolutePath);
+      combinedArgs = combinedArgs.replace("{rom}", "\"" + romAbsolutePath + "\"");
     } else {
-      combinedArgs += " " + romAbsolutePath;
+      combinedArgs += " \"" + romAbsolutePath + "\"";
     }
 
     return combinedArgs.trim();
@@ -133,7 +125,7 @@ public class EmulatorSelectionController implements IController {
    * @param args The argument string.
    * @return A list of arguments.
    */
-  private List<String> parseArguments(String args) {
+  private static List<String> parseArguments(String args) {
     if (args == null || args.isEmpty()) {
       return Collections.emptyList();
     }

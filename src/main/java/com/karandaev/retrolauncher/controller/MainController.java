@@ -290,6 +290,12 @@ public class MainController implements IController {
         return;
       }
 
+      if (compatibleEmulators.size() == 1) {
+        EmulatorSelectionController.launchRomWithEmulator(
+            getClass(), compatibleEmulators.get(0), selectedRom);
+        return;
+      }
+
       var pair =
           Main.getWindow(
               getClass(),
@@ -297,7 +303,7 @@ public class MainController implements IController {
               LanguageManager.getResourceBundle().getString("window.emulator.selection"));
       Stage stage = pair.getKey();
       EmulatorSelectionController controller = (EmulatorSelectionController) pair.getValue();
-      controller.setSelectedRomAndCompatibleEmulators(selectedRom, compatibleEmulators);
+      controller.populateEmulatorButtons(compatibleEmulators, selectedRom);
       stage.initModality(Modality.APPLICATION_MODAL);
       stage.setResizable(false);
       stage.showAndWait();
