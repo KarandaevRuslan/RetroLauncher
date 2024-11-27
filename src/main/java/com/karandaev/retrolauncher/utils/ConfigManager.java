@@ -19,7 +19,7 @@ public class ConfigManager {
   private ConfigManager() {
     profiles = new ArrayList<>();
     // TODO: version should detects automatically
-    currentApplicationVersion = "0.0.1";
+    currentApplicationVersion = "1.0.0";
   }
 
   public static ConfigManager getInstance() {
