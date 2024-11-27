@@ -157,12 +157,17 @@ public class Main extends Application {
   public static void selectOnDriveAndUpdateStringProperty(
       Scene scene, StringProperty stringProperty, String dialogTitle, int type) {
 
+    Stage hiddenStage = new Stage();
+    hiddenStage.initOwner(scene.getWindow());
+    hiddenStage.initModality(Modality.WINDOW_MODAL);
+    hiddenStage.setOpacity(0);
+    hiddenStage.setWidth(1);
+    hiddenStage.setHeight(1);
+
     SwingUtilities.invokeLater(
         () -> {
-          Platform.runLater(
-              () -> {
-                scene.getRoot().setDisable(true);
-              });
+          Platform.runLater(hiddenStage::show);
+
           // Create a JFileChooser instance
           JFileChooser fileChooser = new JFileChooser();
 
@@ -179,10 +184,8 @@ public class Main extends Application {
             File selectedFile = fileChooser.getSelectedFile();
             stringProperty.set(selectedFile.getAbsolutePath());
           }
-          Platform.runLater(
-              () -> {
-                scene.getRoot().setDisable(false);
-              });
+
+          Platform.runLater(hiddenStage::close);
         });
   }
 
