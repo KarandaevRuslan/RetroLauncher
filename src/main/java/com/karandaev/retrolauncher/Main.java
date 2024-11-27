@@ -7,6 +7,7 @@ import com.karandaev.retrolauncher.utils.LanguageManager;
 import com.karandaev.retrolauncher.utils.LogManager;
 import com.karandaev.retrolauncher.utils.UpdateManager;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Objects;
 import javafx.util.Pair;
@@ -153,9 +155,14 @@ public class Main extends Application {
   }
 
   public static void selectOnDriveAndUpdateStringProperty(
-      StringProperty stringProperty, String dialogTitle, int type) {
+      Scene scene, StringProperty stringProperty, String dialogTitle, int type) {
+
     SwingUtilities.invokeLater(
         () -> {
+          Platform.runLater(
+              () -> {
+                scene.getRoot().setDisable(true);
+              });
           // Create a JFileChooser instance
           JFileChooser fileChooser = new JFileChooser();
 
@@ -172,6 +179,10 @@ public class Main extends Application {
             File selectedFile = fileChooser.getSelectedFile();
             stringProperty.set(selectedFile.getAbsolutePath());
           }
+          Platform.runLater(
+              () -> {
+                scene.getRoot().setDisable(false);
+              });
         });
   }
 

@@ -93,6 +93,7 @@ public class EditRomController implements IController {
     browseButton.setOnAction(
         event -> {
           selectOnDriveAndUpdateStringProperty(
+              getScene(),
               pathField.textProperty(),
               LanguageManager.getResourceBundle().getString("file.chooser.select.rom.file"),
               JFileChooser.FILES_AND_DIRECTORIES);
