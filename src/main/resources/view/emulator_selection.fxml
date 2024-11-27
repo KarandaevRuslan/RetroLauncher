@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.karandaev.retrolauncher.controller.EmulatorSelectionController" prefWidth="300">
+
+    <center>
+        <VBox fx:id="emulatorButtonContainer" alignment="CENTER" spacing="10">
+            <padding>
+                <Insets bottom="10" left="15" right="15" top="10"/>
+            </padding>
+        </VBox>
+    </center>
+
+    <bottom>
+        <Button fx:id="cancelButton" onAction="#closeWindow" maxWidth="Infinity" text="%button.cancel"/>
+    </bottom>
+</BorderPane>

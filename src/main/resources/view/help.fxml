@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karandaev.retrolauncher.controller.HelpController"
+            prefWidth="600.0" prefHeight="400.0">
+    <center>
+        <WebView fx:id="webView" layoutX="0.0" layoutY="0.0"/>
+    </center>
+</BorderPane>

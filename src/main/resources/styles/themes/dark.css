@@ -1,0 +1,70 @@
+/* dark.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2b2b2b;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #1e1e1e;
+    text-align: center;
+    padding: 20px;
+}
+
+header h1, footer p {
+    margin: 0;
+}
+
+nav {
+    background-color: #3c3c3c;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+}
+
+h2 {
+    border-bottom: 2px solid #3c3c3c;
+    padding-bottom: 10px;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+ul, ol {
+    margin-left: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+p {
+    line-height: 1.6;
+}

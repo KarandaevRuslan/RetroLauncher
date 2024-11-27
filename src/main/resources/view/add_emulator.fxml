@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<GridPane xmlns="http://javafx.com/javafx/11.0.1"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.karandaev.retrolauncher.controller.AddEmulatorController"
+          hgap="10" vgap="10">
+    <padding>
+        <Insets top="10" right="15" bottom="10" left="15"/>
+    </padding>
+
+    <Label text="%label.emulator.name" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="nameField" promptText="%prompt.enter.emulator.name" GridPane.rowIndex="0" GridPane.columnIndex="1"
+               GridPane.columnSpan="2" maxWidth="Infinity"
+               GridPane.hgrow="ALWAYS"/>
+
+    <Label text="%label.emulator.path" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="pathField" promptText="%prompt.enter.emulator.path" GridPane.rowIndex="1"
+               GridPane.columnIndex="1" maxWidth="Infinity"
+               GridPane.hgrow="ALWAYS"/>
+    <Button fx:id="browseButton" text="%button.browse" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+    <Label text="%label.supported.consoles" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="consolesField" promptText="%prompt.enter.supported.consoles" GridPane.rowIndex="2"
+               GridPane.columnIndex="1" GridPane.columnSpan="2" maxWidth="Infinity"
+               GridPane.hgrow="ALWAYS"/>
+
+    <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" alignment="CENTER_RIGHT"
+          maxWidth="Infinity"
+          GridPane.hgrow="ALWAYS">
+        <Button fx:id="saveButton" text="%button.save"/>
+        <Button fx:id="cancelButton" text="%button.cancel"/>
+    </HBox>
+
+</GridPane>

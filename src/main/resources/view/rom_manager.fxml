@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.karandaev.retrolauncher.controller.RomManagerController" prefWidth="650">
+    <bottom>
+        <Button fx:id="addRomButton" text="%button.add.rom" maxWidth="Infinity"/>
+    </bottom>
+    <center>
+        <TableView fx:id="romTableView">
+            <columns>
+                <TableColumn fx:id="romNameColumn" text="%column.rom.name" editable="false" reorderable="false"
+                             prefWidth="150.0"/>
+                <TableColumn fx:id="romPathColumn" text="%column.path" editable="false" reorderable="false"
+                             prefWidth="200.0"/>
+                <TableColumn fx:id="romConsolesColumn" text="%column.consoles" editable="false" reorderable="false"
+                             prefWidth="100.0"/>
+                <TableColumn fx:id="romGenresColumn" text="%column.genres" editable="false" reorderable="false"
+                             prefWidth="100.0"/>
+                <TableColumn fx:id="romFavoriteColumn" text="%column.favorite" editable="false" reorderable="false"
+                             prefWidth="50.0"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

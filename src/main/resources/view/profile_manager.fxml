@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.karandaev.retrolauncher.controller.ProfileManagerController"
+      prefWidth="300">
+    <ListView fx:id="profileListView" VBox.vgrow="ALWAYS"/>
+    <Button fx:id="createProfileButton" text="%menu.profile.create" maxWidth="Infinity"/>
+</VBox>

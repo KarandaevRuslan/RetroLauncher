@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<GridPane xmlns="http://javafx.com/javafx/11.0.14-internal"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.karandaev.retrolauncher.controller.ProfileSettingsController"
+          hgap="10" vgap="10" prefWidth="300">
+    <padding>
+        <Insets top="10" right="15" bottom="10" left="15"/>
+    </padding>
+
+    <Label text="%profile.settings.username" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="usernameField" promptText="%prompt.enter.username" GridPane.rowIndex="0" GridPane.columnIndex="1"
+               GridPane.columnSpan="2" maxWidth="Infinity" GridPane.hgrow="ALWAYS" prefWidth="Infinity"/>
+
+    <Label text="%profile.settings.language" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="languageComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1"
+              GridPane.columnSpan="2" maxWidth="Infinity" GridPane.hgrow="ALWAYS" prefWidth="Infinity"/>
+
+    <Label text="%profile.settings.theme" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="themeComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1"
+              GridPane.columnSpan="2" maxWidth="Infinity" GridPane.hgrow="ALWAYS" prefWidth="Infinity"/>
+
+    <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"
+          alignment="CENTER_RIGHT" maxWidth="Infinity" GridPane.hgrow="ALWAYS" prefWidth="Infinity">
+        <Button onAction="#applyProfileSettings" text="%button.apply" prefWidth="100"/>
+    </HBox>
+</GridPane>
