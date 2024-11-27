@@ -8,15 +8,20 @@ import com.karandaev.retrolauncher.model.RomFile;
 import com.karandaev.retrolauncher.utils.ConfigManager;
 import com.karandaev.retrolauncher.utils.LanguageManager;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 import java.io.File;
 import java.util.*;
 
 import static com.karandaev.retrolauncher.Main.getWindow;
+import static com.karandaev.retrolauncher.Main.selectOnDriveAndUpdateStringProperty;
 
 /** Controller class for the Add ROM window. */
 public class AddRomController implements IController {
@@ -37,13 +42,10 @@ public class AddRomController implements IController {
     // Handle Browse button click to select ROM file
     browseButton.setOnAction(
         event -> {
-          FileChooser fileChooser = new FileChooser();
-          fileChooser.setTitle(
-              LanguageManager.getResourceBundle().getString("file.chooser.select.rom.file"));
-          File selectedFile = fileChooser.showOpenDialog(getScene().getWindow());
-          if (selectedFile != null) {
-            pathField.setText(selectedFile.getAbsolutePath());
-          }
+          selectOnDriveAndUpdateStringProperty(
+              pathField.textProperty(),
+              LanguageManager.getResourceBundle().getString("file.chooser.select.rom.file"),
+              JFileChooser.FILES_AND_DIRECTORIES);
         });
 
     // Handle Save button click to add a new ROM
@@ -132,7 +134,7 @@ public class AddRomController implements IController {
           LanguageManager.getResourceBundle().getString("error.invalid.rom.path") + "\n";
     } else {
       File file = new File(pathField.getText());
-      if (!file.exists() || !file.isFile()) {
+      if (!file.exists()) {
         errorMessage +=
             LanguageManager.getResourceBundle().getString("error.rom.path.not.exist") + "\n";
       }

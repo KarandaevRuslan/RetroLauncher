@@ -7,6 +7,7 @@ import com.karandaev.retrolauncher.utils.LanguageManager;
 import com.karandaev.retrolauncher.utils.LogManager;
 import com.karandaev.retrolauncher.utils.UpdateManager;
 import javafx.application.Application;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,10 +19,13 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import javafx.util.Pair;
+
+import javax.swing.*;
 
 /** Main application class for RetroLauncher. */
 public class Main extends Application {
@@ -146,6 +150,29 @@ public class Main extends Application {
     stack.setPrefWidth(column.getPrefWidth());
     column.setGraphic(stack);
     column.setText(null); // Removes standard header text
+  }
+
+  public static void selectOnDriveAndUpdateStringProperty(
+      StringProperty stringProperty, String dialogTitle, int type) {
+    SwingUtilities.invokeLater(
+        () -> {
+          // Create a JFileChooser instance
+          JFileChooser fileChooser = new JFileChooser();
+
+          // Allow selection of both files and directories
+          fileChooser.setFileSelectionMode(type);
+          fileChooser.setDialogTitle(dialogTitle);
+
+          // Show the open dialog
+          int result = fileChooser.showOpenDialog(null);
+
+          // If a file or directory was selected
+          if (result == JFileChooser.APPROVE_OPTION) {
+            // Get the selected file or directory
+            File selectedFile = fileChooser.getSelectedFile();
+            stringProperty.set(selectedFile.getAbsolutePath());
+          }
+        });
   }
 
   @Override

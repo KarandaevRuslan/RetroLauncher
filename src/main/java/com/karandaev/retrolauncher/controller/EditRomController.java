@@ -22,9 +22,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.karandaev.retrolauncher.Main.selectOnDriveAndUpdateStringProperty;
 
 /** Controller class for the Edit ROM window. */
 public class EditRomController implements IController {
@@ -89,13 +92,10 @@ public class EditRomController implements IController {
     // Handle Browse button click to select ROM file
     browseButton.setOnAction(
         event -> {
-          FileChooser fileChooser = new FileChooser();
-          fileChooser.setTitle(
-              LanguageManager.getResourceBundle().getString("file.chooser.select.rom.file"));
-          File selectedFile = fileChooser.showOpenDialog(getScene().getWindow());
-          if (selectedFile != null) {
-            pathField.setText(selectedFile.getAbsolutePath());
-          }
+          selectOnDriveAndUpdateStringProperty(
+              pathField.textProperty(),
+              LanguageManager.getResourceBundle().getString("file.chooser.select.rom.file"),
+              JFileChooser.FILES_AND_DIRECTORIES);
         });
 
     // Handle Save button click to update ROM details
@@ -296,7 +296,7 @@ public class EditRomController implements IController {
           LanguageManager.getResourceBundle().getString("error.invalid.rom.path") + "\n";
     } else {
       File file = new File(pathField.getText());
-      if (!file.exists() || !file.isFile()) {
+      if (!file.exists()) {
         errorMessage +=
             LanguageManager.getResourceBundle().getString("error.rom.path.not.exist") + "\n";
       }

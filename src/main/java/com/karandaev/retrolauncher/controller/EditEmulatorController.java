@@ -12,10 +12,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+
+import static com.karandaev.retrolauncher.Main.selectOnDriveAndUpdateStringProperty;
 
 /** Controller class for the Edit Emulator window. */
 public class EditEmulatorController implements IController {
@@ -35,14 +39,11 @@ public class EditEmulatorController implements IController {
     // Handle Browse button click to select emulator executable
     browseButton.setOnAction(
         event -> {
-          FileChooser fileChooser = new FileChooser();
-          fileChooser.setTitle(
+          selectOnDriveAndUpdateStringProperty(
+              pathField.textProperty(),
               LanguageManager.getResourceBundle()
-                  .getString("file.chooser.select.emulator.executable"));
-          File selectedFile = fileChooser.showOpenDialog(getScene().getWindow());
-          if (selectedFile != null) {
-            pathField.setText(selectedFile.getAbsolutePath());
-          }
+                  .getString("file.chooser.select.emulator.executable"),
+              JFileChooser.FILES_ONLY);
         });
 
     // Handle Save button click to update emulator details
