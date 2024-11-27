@@ -5,9 +5,9 @@ module com.karandaev.retrolauncher {
   requires javafx.web;
   requires com.fasterxml.jackson.databind;
   requires jdk.jshell;
-    requires atlantafx.base;
+  requires atlantafx.base;
 
-    opens com.karandaev.retrolauncher to
+  opens com.karandaev.retrolauncher to
       javafx.fxml;
 
   exports com.karandaev.retrolauncher;
@@ -19,6 +19,9 @@ module com.karandaev.retrolauncher {
       com.fasterxml.jackson.databind;
   opens com.karandaev.retrolauncher.model to
       com.fasterxml.jackson.databind;
-    exports com.karandaev.retrolauncher.controller.interfaces;
-    opens com.karandaev.retrolauncher.controller.interfaces to javafx.fxml;
+
+  exports com.karandaev.retrolauncher.controller.interfaces;
+
+  opens com.karandaev.retrolauncher.controller.interfaces to
+      javafx.fxml;
 }

@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.0</junit.version>
-        <javafx.version>17.0.6</javafx.version> <!-- Centralize the JavaFX version -->
+        <javafx.version>17.0.6</javafx.version>
     </properties>
 
     <dependencies>
@@ -56,7 +56,6 @@
 
     <build>
         <plugins>
-            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -67,31 +66,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Shade Plugin for creating a Fat JAR -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.karandaev.retrolauncher.Main</mainClass> <!-- Specify the full path to your main class -->
-                                </transformer>
-                            </transformers>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>fat</shadedClassifierName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- JavaFX Maven Plugin (optional, for running the application) -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -100,7 +74,13 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.karandaev.retrolauncher.Main</mainClass> <!-- Ensure the path is correct -->
+                            <mainClass>com.karandaev.retrolauncher.Main</mainClass>
+                            <launcher>RetroLauncher</launcher>
+                            <jlinkZipName>RetroLauncher</jlinkZipName>
+                            <jlinkImageName>app</jlinkImageName>
+                            <noManPages>true</noManPages>
+                            <stripDebug>true</stripDebug>
+                            <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
                     </execution>
                 </executions>
