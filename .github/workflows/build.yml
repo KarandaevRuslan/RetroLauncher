@@ -131,18 +131,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Get version from determine_version job
-        id: get_version
-        run: echo "version=v${{ needs.determine_version.outputs.version }}" >> $GITHUB_OUTPUT
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.outputs.version }}
-          release_name: Release ${{ steps.get_version.outputs.version }}
+          tag_name: v${{ needs.determine_version.outputs.version }}
+          release_name: Release v${{ needs.determine_version.outputs.version }}
           draft: false
           prerelease: false
 

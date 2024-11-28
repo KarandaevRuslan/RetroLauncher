@@ -65,6 +65,7 @@ public class UpdateManager {
                   + " "
                   + getVersion());
       alert.showAndWait();
+      LogManager.getLogger().warning("Is download URL empty? " + downloadUrlOpt.isEmpty());
       return;
     }
     String downloadUrl = downloadUrlOpt.get();
@@ -107,7 +108,7 @@ public class UpdateManager {
       System.err.println(msg);
       return true;
     }
-    return isVersionNewer(latestVersion, getVersion());
+    return isVersionNewer(latestVersion.trim(), getVersion().trim());
   }
 
   private static Optional<String> getDownloadUrl() {
