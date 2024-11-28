@@ -7,13 +7,12 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-x64:
+    name: Build x64
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-
-    runs-on: ${{ matrix.os }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,8 +30,57 @@ jobs:
       - name: Create runtime image
         run: mvn javafx:jlink
 
+      - name: Copy RetroLauncher script for Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          copy scripts\RetroLauncher.bat target\RetroLauncher\RetroLauncher.bat
+
+      - name: Copy RetroLauncher script for Unix/macOS
+        if: matrix.os != 'windows-latest'
+        run: |
+          cp scripts/RetroLauncher.sh target/RetroLauncher/RetroLauncher.sh
+          chmod +x target/RetroLauncher/RetroLauncher.sh
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: RetroLauncher-${{ matrix.os }}
-          path: target/RetroLauncher.zip
+          name: RetroLauncher-${{ matrix.os }}-x64
+          path: target/RetroLauncher
+
+  build-arm64:
+    name: Build arm64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker for arm64
+        run: |
+          docker pull arm64v8/openjdk:17-jdk
+
+      - name: Build and test arm64 using Docker
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            arm64v8/openjdk:17-jdk \
+            bash -c "mvn clean verify"
+
+      - name: Create runtime image arm64 using Docker
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            arm64v8/openjdk:17-jdk \
+            bash -c "mvn javafx:jlink"
+
+      - name: Copy RetroLauncher script for Unix/macOS arm64
+        run: |
+          cp scripts/RetroLauncher.sh target/RetroLauncher/RetroLauncher.sh
+          chmod +x target/RetroLauncher/RetroLauncher.sh
+
+      - name: Upload arm64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RetroLauncher-ubuntu-arm64
+          path: target/RetroLauncher

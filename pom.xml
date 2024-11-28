@@ -16,6 +16,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
@@ -77,7 +82,7 @@
                             <mainClass>com.karandaev.retrolauncher.Main</mainClass>
                             <launcher>RetroLauncher</launcher>
                             <jlinkZipName>RetroLauncher</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <jlinkImageName>RetroLauncher</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>

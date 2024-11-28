@@ -1,5 +1,6 @@
 package com.karandaev.retrolauncher;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.karandaev.retrolauncher.controller.interfaces.IController;
 import com.karandaev.retrolauncher.model.UserProfile;
 import com.karandaev.retrolauncher.utils.ConfigManager;
@@ -20,14 +21,17 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Objects;
 import javafx.util.Pair;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /** Main application class for RetroLauncher. */
 public class Main extends Application {
@@ -163,6 +167,21 @@ public class Main extends Application {
     hiddenStage.setOpacity(0);
     hiddenStage.setWidth(1);
     hiddenStage.setHeight(1);
+
+    try {
+      if (ConfigManager.getInstance()
+          .getCurrentUserProfile()
+          .getPreferredThemeEn()
+          .equals("light")) {
+        UIManager.setLookAndFeel(new FlatLightLaf());
+
+      } else {
+        UIManager.setLookAndFeel(new FlatDarkLaf());
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      LogManager.getLogger().severe(e.getMessage());
+    }
 
     SwingUtilities.invokeLater(
         () -> {

@@ -6,7 +6,8 @@ module com.karandaev.retrolauncher {
   requires com.fasterxml.jackson.databind;
   requires jdk.jshell;
   requires atlantafx.base;
-    requires java.desktop;
+  requires java.desktop;
+    requires com.formdev.flatlaf;
 
     opens com.karandaev.retrolauncher to
       javafx.fxml;
