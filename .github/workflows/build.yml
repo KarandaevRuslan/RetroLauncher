@@ -64,19 +64,19 @@ jobs:
       - name: Download artifacts - Ubuntu
         uses: actions/download-artifact@v4
         with:
-          name: RetroLauncher-ubuntu-latest-x64
+          name: RetroLauncher-ubuntu-latest-x64.zip
           path: artifacts/ubuntu
 
       - name: Download artifacts - Windows
         uses: actions/download-artifact@v4
         with:
-          name: RetroLauncher-windows-latest-x64
+          name: RetroLauncher-windows-latest-x64.zip
           path: artifacts/windows
 
       - name: Download artifacts - macOS
         uses: actions/download-artifact@v4
         with:
-          name: RetroLauncher-macos-latest-x64
+          name: RetroLauncher-macos-latest-x64.zip
           path: artifacts/macos
 
       - name: Set up Git
@@ -112,24 +112,6 @@ jobs:
           release_name: Release v${{ steps.vars.outputs.version }}
           draft: false
           prerelease: false
-
-      - name: Compress Ubuntu Artifact
-        run: |
-          cd artifacts/ubuntu
-          zip -r RetroLauncher-ubuntu-latest-x64.zip RetroLauncher-ubuntu-latest-x64
-        shell: bash
-
-      - name: Compress Windows Artifact
-        run: |
-          cd artifacts/windows
-          zip -r RetroLauncher-windows-latest-x64.zip RetroLauncher-windows-latest-x64
-        shell: bash
-
-      - name: Compress macOS Artifact
-        run: |
-          cd artifacts/macos
-          zip -r RetroLauncher-macos-latest-x64.zip RetroLauncher-macos-latest-x64
-        shell: bash
 
       - name: Upload Release Assets - Ubuntu
         uses: actions/upload-release-asset@v1
