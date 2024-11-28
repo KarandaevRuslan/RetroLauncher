@@ -116,19 +116,19 @@ jobs:
       - name: Compress Ubuntu Artifact
         run: |
           cd artifacts/ubuntu
-          find . -type f -o -type d | zip -r ../RetroLauncher-ubuntu-latest-x64.zip -@
+          zip -r ../RetroLauncher-ubuntu-latest-x64.zip ./*
         shell: bash
 
       - name: Compress Windows Artifact
         run: |
           cd artifacts/windows
-          find . -type f -o -type d | zip -r ../RetroLauncher-windows-latest-x64.zip -@
+          zip -r ../RetroLauncher-windows-latest-x64.zip ./*
         shell: bash
 
       - name: Compress macOS Artifact
         run: |
           cd artifacts/macos
-          find . -type f -o -type d | zip -r ../RetroLauncher-macos-latest-x64.zip -@
+          zip -r ../RetroLauncher-macos-latest-x64.zip ./*
         shell: bash
 
       - name: Upload Release Assets - Ubuntu
