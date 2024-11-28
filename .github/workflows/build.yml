@@ -64,19 +64,19 @@ jobs:
       - name: Download artifacts - Ubuntu
         uses: actions/download-artifact@v4
         with:
-          name: RetroLauncher-ubuntu-latest-x64.zip
+          name: RetroLauncher-ubuntu-latest-x64
           path: artifacts/ubuntu
 
       - name: Download artifacts - Windows
         uses: actions/download-artifact@v4
         with:
-          name: RetroLauncher-windows-latest-x64.zip
+          name: RetroLauncher-windows-latest-x64
           path: artifacts/windows
 
       - name: Download artifacts - macOS
         uses: actions/download-artifact@v4
         with:
-          name: RetroLauncher-macos-latest-x64.zip
+          name: RetroLauncher-macos-latest-x64
           path: artifacts/macos
 
       - name: Set up Git
@@ -119,7 +119,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/ubuntu/RetroLauncher-ubuntu-latest-x64.zip
+          asset_path: ./artifacts/ubuntu/RetroLauncher-ubuntu-latest-x64
           asset_name: RetroLauncher-ubuntu-latest-x64.zip
           asset_content_type: application/zip
 
@@ -129,7 +129,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/windows/RetroLauncher-windows-latest-x64.zip
+          asset_path: ./artifacts/windows/RetroLauncher-windows-latest-x64
           asset_name: RetroLauncher-windows-latest-x64.zip
           asset_content_type: application/zip
 
@@ -139,6 +139,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/macos/RetroLauncher-macos-latest-x64.zip
+          asset_path: ./artifacts/macos/RetroLauncher-macos-latest-x64
           asset_name: RetroLauncher-macos-latest-x64.zip
           asset_content_type: application/zip
