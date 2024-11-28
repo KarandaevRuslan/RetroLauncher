@@ -101,7 +101,6 @@ jobs:
             patch=$((patch + 1))
             echo "version=${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
           fi
-          find .
 
       - name: Create Release
         id: create_release
@@ -114,13 +113,31 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Compress Ubuntu Artifact
+        run: |
+          cd artifacts
+          zip -r RetroLauncher-ubuntu-latest-x64.zip ubuntu
+        shell: bash
+
+      - name: Compress Windows Artifact
+        run: |
+          cd artifacts
+          zip -r RetroLauncher-windows-latest-x64.zip windows
+        shell: bash
+
+      - name: Compress macOS Artifact
+        run: |
+          cd artifacts
+          zip -r RetroLauncher-macos-latest-x64.zip macos
+        shell: bash
+
       - name: Upload Release Assets - Ubuntu
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/ubuntu/RetroLauncher-ubuntu-latest-x64.zip
+          asset_path: ./artifacts/RetroLauncher-ubuntu-latest-x64.zip
           asset_name: RetroLauncher-ubuntu-latest-x64.zip
           asset_content_type: application/zip
 
@@ -130,7 +147,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/windows/RetroLauncher-windows-latest-x64.zip
+          asset_path: ./artifacts/RetroLauncher-windows-latest-x64.zip
           asset_name: RetroLauncher-windows-latest-x64.zip
           asset_content_type: application/zip
 
@@ -140,6 +157,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/macos/RetroLauncher-macos-latest-x64.zip
+          asset_path: ./artifacts/RetroLauncher-macos-latest-x64.zip
           asset_name: RetroLauncher-macos-latest-x64.zip
           asset_content_type: application/zip
