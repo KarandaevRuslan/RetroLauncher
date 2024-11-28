@@ -46,3 +46,85 @@ jobs:
         with:
           name: RetroLauncher-${{ matrix.os }}-x64
           path: target/RetroLauncher
+
+
+
+  create_release:
+    name: Create GitHub Release
+    needs: build-x64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: RetroLauncher-ubuntu-latest-x64
+          path: artifacts/ubuntu
+      - uses: actions/download-artifact@v4
+        with:
+          name: RetroLauncher-windows-latest-x64
+          path: artifacts/windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: RetroLauncher-macos-latest-x64
+          path: artifacts/macos
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine release version
+        id: vars
+        run: |
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          if [ -z "$latest_tag" ]; then
+            echo "version=0.1.0" >> $GITHUB_OUTPUT
+          else
+            IFS='.' read -r -a parts <<< "${latest_tag#v}"
+            patch=$((parts[2] + 1))
+            echo "version=${parts[0]}.${parts[1]}.$patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.vars.outputs.version }}
+          release_name: Release v${{ steps.vars.outputs.version }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Assets - Ubuntu
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/ubuntu/RetroLauncher-ubuntu-latest-x64
+          asset_name: RetroLauncher-ubuntu-latest-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Assets - Windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/windows/RetroLauncher-windows-latest-x64
+          asset_name: RetroLauncher-windows-latest-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Assets - macOS
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/macos/RetroLauncher-macos-latest-x64
+          asset_name: RetroLauncher-macos-latest-x64.zip
+          asset_content_type: application/zip
