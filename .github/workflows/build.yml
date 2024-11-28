@@ -115,20 +115,20 @@ jobs:
 
       - name: Compress Ubuntu Artifact
         run: |
-          cd artifacts
-          zip -r RetroLauncher-ubuntu-latest-x64.zip ubuntu
+          cd artifacts/ubuntu
+          zip -r RetroLauncher-ubuntu-latest-x64.zip .
         shell: bash
 
       - name: Compress Windows Artifact
         run: |
-          cd artifacts
-          zip -r RetroLauncher-windows-latest-x64.zip windows
+          cd artifacts/windows
+          zip -r RetroLauncher-windows-latest-x64.zip .
         shell: bash
 
       - name: Compress macOS Artifact
         run: |
-          cd artifacts
-          zip -r RetroLauncher-macos-latest-x64.zip macos
+          cd artifacts/macos
+          zip -r RetroLauncher-macos-latest-x64.zip .
         shell: bash
 
       - name: Upload Release Assets - Ubuntu
