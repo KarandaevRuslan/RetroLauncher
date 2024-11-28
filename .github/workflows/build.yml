@@ -69,7 +69,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
-          @echo v${{ needs.determine_version.outputs.version }} > target\RetroLauncher\VERSION
+          <nul set /p="v${{ needs.determine_version.outputs.version }}"> target\RetroLauncher\VERSION
 
       - name: Copy Updater.jar (Unix/macOS)
         if: matrix.os != 'windows-latest'
