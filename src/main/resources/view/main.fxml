@@ -4,21 +4,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karandaev.retrolauncher.controller.MainController">
+<BorderPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karandaev.retrolauncher.controller.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu fx:id="menuFile" text="%menu.file">
-                <MenuItem fx:id="menuItemProfileSettings" onAction="#openProfileSettings" text="%menu.profile.settings" />
-                <MenuItem fx:id="menuItemProfileManager" onAction="#openProfileManager" text="%menu.profile.manager" />
-                <MenuItem fx:id="menuItemExit" onAction="#exitApplication" text="%menu.exit" />
+                <MenuItem fx:id="menuItemProfileSettings" onAction="#openProfileSettings"
+                          text="%menu.profile.settings"/>
+                <MenuItem fx:id="menuItemProfileManager" onAction="#openProfileManager" text="%menu.profile.manager"/>
+                <MenuItem fx:id="menuItemUpdateApplication" onAction="#updateApplication"
+                          text="%menu.application.update"/>
+                <MenuItem fx:id="menuItemExit" onAction="#exitApplication" text="%menu.exit"/>
             </Menu>
             <Menu fx:id="menuManage" text="%menu.manage">
-                <MenuItem fx:id="menuItemManageEmulators" onAction="#manageEmulators" text="%menu.manage.emulators" />
-                <MenuItem fx:id="menuItemManageRoms" onAction="#manageRoms" text="%menu.manage.roms" />
+                <MenuItem fx:id="menuItemManageEmulators" onAction="#manageEmulators" text="%menu.manage.emulators"/>
+                <MenuItem fx:id="menuItemManageRoms" onAction="#manageRoms" text="%menu.manage.roms"/>
             </Menu>
             <Menu fx:id="menuHelp" text="%menu.help">
-                <MenuItem fx:id="menuItemHelpContents" onAction="#showHelpContents" text="%menu.help.contents" />
-                <MenuItem fx:id="menuItemAbout" onAction="#showAbout" text="%menu.help.about" />
+                <MenuItem fx:id="menuItemHelpContents" onAction="#showHelpContents" text="%menu.help.contents"/>
+                <MenuItem fx:id="menuItemAbout" onAction="#showAbout" text="%menu.help.about"/>
             </Menu>
         </MenuBar>
     </top>
@@ -29,25 +33,29 @@
                     <children>
                         <TextField fx:id="searchField" promptText="%prompt.search.rom">
                             <HBox.margin>
-                                <Insets bottom="2.0" left="4.0" top="2.0" />
+                                <Insets bottom="2.0" left="4.0" top="2.0"/>
                             </HBox.margin>
                         </TextField>
                         <ComboBox fx:id="filterComboBox" value="%filter.all.rom">
                             <HBox.margin>
-                                <Insets bottom="2.0" left="2.0" top="2.0" />
+                                <Insets bottom="2.0" left="2.0" top="2.0"/>
                             </HBox.margin>
                             <tooltip>
-                                <Tooltip text="%prompt.filter.rom" />
+                                <Tooltip text="%prompt.filter.rom"/>
                             </tooltip>
                         </ComboBox>
                     </children>
                 </HBox>
                 <TableView fx:id="romTableView" prefHeight="511.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="romNameColumn" editable="false" prefWidth="200.0" reorderable="false" text="%column.name" />
-                        <TableColumn fx:id="romConsolesColumn" editable="false" prefWidth="200.0" reorderable="false" text="%column.console" />
-                        <TableColumn fx:id="romGenresColumn" editable="false" prefWidth="150.0" reorderable="false" text="%column.genres" />
-                        <TableColumn fx:id="romFavoriteColumn" editable="false" reorderable="false" text="%column.favorite" />
+                        <TableColumn fx:id="romNameColumn" editable="false" prefWidth="200.0" reorderable="false"
+                                     text="%column.name"/>
+                        <TableColumn fx:id="romConsolesColumn" editable="false" prefWidth="200.0" reorderable="false"
+                                     text="%column.console"/>
+                        <TableColumn fx:id="romGenresColumn" editable="false" prefWidth="150.0" reorderable="false"
+                                     text="%column.genres"/>
+                        <TableColumn fx:id="romFavoriteColumn" editable="false" reorderable="false"
+                                     text="%column.favorite"/>
                     </columns>
                 </TableView>
             </children>

@@ -7,6 +7,7 @@ import com.karandaev.retrolauncher.model.RomFile;
 import com.karandaev.retrolauncher.utils.ConfigManager;
 import com.karandaev.retrolauncher.utils.LanguageManager;
 import com.karandaev.retrolauncher.utils.LogManager;
+import com.karandaev.retrolauncher.utils.UpdateManager;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.karandaev.retrolauncher.Main.*;
+import static com.karandaev.retrolauncher.utils.UpdateManager.getVersion;
 
 /** Controller class for the main application window. */
 public class MainController implements IController {
@@ -340,6 +342,11 @@ public class MainController implements IController {
   }
 
   @FXML
+  private void updateApplication() {
+    UpdateManager.tryUpdate(getClass());
+  }
+
+  @FXML
   private void showHelpContents() throws Exception {
     try {
       Stage helpStage =
@@ -364,7 +371,7 @@ public class MainController implements IController {
             getClass(),
             Alert.AlertType.INFORMATION,
             LanguageManager.getResourceBundle().getString("menu.help.about"),
-            PROGRAM_NAME + " v" + ConfigManager.getInstance().getCurrentApplicationVersion(),
+            PROGRAM_NAME + " " + getVersion(),
             LanguageManager.getResourceBundle().getString("alert.about.content"));
     alert.showAndWait();
   }

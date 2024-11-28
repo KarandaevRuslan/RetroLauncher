@@ -1,5 +1,6 @@
 package com.karandaev.retrolauncher.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.karandaev.retrolauncher.model.UserProfile;
 
@@ -13,13 +14,10 @@ public class ConfigManager {
   private static ConfigManager instance;
   private List<UserProfile> profiles;
   private Integer currentUserProfileIndex = 0;
-  private String currentApplicationVersion;
   private final String configFilePath = "config.json";
 
   private ConfigManager() {
     profiles = new ArrayList<>();
-    // TODO: version should detects automatically
-    currentApplicationVersion = "1.0.0";
   }
 
   public static ConfigManager getInstance() {
@@ -39,7 +37,6 @@ public class ConfigManager {
         ConfigData configData = mapper.readValue(configFile, ConfigData.class);
         this.profiles = configData.getProfiles();
         this.currentUserProfileIndex = configData.getCurrentUserProfileIndex();
-        this.currentApplicationVersion = configData.getCurrentApplicationVersion();
         LogManager.getLogger().info("Configuration loaded successfully.");
       } else {
         // Initialize with default data
@@ -55,8 +52,7 @@ public class ConfigManager {
   public void saveConfig() {
     ObjectMapper mapper = new ObjectMapper();
     try {
-      ConfigData configData =
-          new ConfigData(profiles, currentUserProfileIndex, currentApplicationVersion);
+      ConfigData configData = new ConfigData(profiles, currentUserProfileIndex);
       mapper.writeValue(new File(configFilePath), configData);
       LogManager.getLogger().info("Configuration saved successfully.");
     } catch (IOException e) {
@@ -89,31 +85,19 @@ public class ConfigManager {
     return configFilePath;
   }
 
-  public String getCurrentApplicationVersion() {
-    return currentApplicationVersion;
-  }
-
   // Inner class to hold configuration data for serialization
+  @JsonIgnoreProperties(ignoreUnknown = true)
   private static class ConfigData {
     private List<UserProfile> profiles;
     private Integer currentUserProfileIndex;
-    private String currentApplicationVersion;
 
     public ConfigData() {
       // Default constructor
     }
 
-    public ConfigData(
-        List<UserProfile> profiles,
-        Integer currentUserProfileIndex,
-        String currentApplicationVersion) {
+    public ConfigData(List<UserProfile> profiles, Integer currentUserProfileIndex) {
       this.profiles = profiles;
       this.currentUserProfileIndex = currentUserProfileIndex;
-      this.currentApplicationVersion = currentApplicationVersion;
-    }
-
-    public String getCurrentApplicationVersion() {
-      return currentApplicationVersion;
     }
 
     public Integer getCurrentUserProfileIndex() {

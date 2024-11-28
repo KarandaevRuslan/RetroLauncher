@@ -45,9 +45,6 @@ public class Main extends Application {
       // Initialize configuration
       ConfigManager.getInstance().loadConfig();
 
-      // Check for updates
-      UpdateManager.checkForUpdates();
-
       // Load user profiles and select active profile
       UserProfile activeProfile = ConfigManager.getInstance().getCurrentUserProfile();
       if (activeProfile == null) {
@@ -77,6 +74,7 @@ public class Main extends Application {
             ConfigManager.getInstance().getCurrentUserProfile().getPreferredLanguageShort();
         LanguageManager.setLocale(new Locale(preferredLanguage));
       }
+
       getWindow(getClass(), "/view/main.fxml", PROGRAM_NAME).getKey().show();
 
     } catch (Exception e) {

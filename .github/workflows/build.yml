@@ -7,8 +7,37 @@ on:
     branches: [ master ]
 
 jobs:
+  determine_version:
+    name: Determine Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.vars.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Determine release version
+        id: vars
+        run: |
+          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
+          if [ -z "$latest_tag" ]; then
+            version=0.1.0
+          else
+            version=${latest_tag#v}
+            IFS='.' read -r -a parts <<< "$version"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            patch=$((patch + 1))
+            version=${major}.${minor}.${patch}
+          fi
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
   build-x64:
     name: Build x64
+    needs: determine_version
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -30,6 +59,28 @@ jobs:
       - name: Create runtime image
         run: mvn javafx:jlink
 
+      - name: Create VERSION file (Unix/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          echo "v${{ needs.determine_version.outputs.version }}" > target/RetroLauncher/VERSION
+
+      - name: Create VERSION file (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          echo v${{ needs.determine_version.outputs.version }} > target\RetroLauncher\VERSION
+
+      - name: Copy Updater.jar (Unix/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cp "additional tools/RetroLauncherUpdater/out/artifacts/RetroLauncherUpdater_jar/RetroLauncherUpdater.jar" target/RetroLauncher/Updater.jar
+
+      - name: Copy Updater.jar (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          copy "additional tools\RetroLauncherUpdater\out\artifacts\RetroLauncherUpdater_jar\RetroLauncherUpdater.jar" target\RetroLauncher\Updater.jar
+
       - name: Copy RetroLauncher script for Windows
         if: matrix.os == 'windows-latest'
         run: |
@@ -47,8 +98,6 @@ jobs:
           name: RetroLauncher-${{ matrix.os }}-x64
           path: target/RetroLauncher
 
-
-
   create_release:
     name: Create GitHub Release
     needs: build-x64
@@ -58,8 +107,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Providing access to all tags
 
       - name: Download artifacts - Ubuntu
         uses: actions/download-artifact@v4
@@ -84,23 +131,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Determine release version
-        id: vars
-        run: |
-          # Trying to get the latest tag
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "")
-          if [ -z "$latest_tag" ]; then
-            echo "version=0.1.0" >> $GITHUB_OUTPUT
-          else
-            # Deleting 'v' prefix if it is exist
-            latest_tag=${latest_tag#v}
-            IFS='.' read -r -a parts <<< "$latest_tag"
-            major=${parts[0]}
-            minor=${parts[1]}
-            patch=${parts[2]}
-            patch=$((patch + 1))
-            echo "version=${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
-          fi
+      - name: Get version from determine_version job
+        id: get_version
+        run: echo "version=v${{ needs.determine_version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
@@ -108,8 +141,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.vars.outputs.version }}
-          release_name: Release v${{ steps.vars.outputs.version }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
           draft: false
           prerelease: false
 
