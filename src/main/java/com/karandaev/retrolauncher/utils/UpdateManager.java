@@ -40,6 +40,7 @@ public class UpdateManager {
       if (Files.exists(versionFile)) {
         String version =
             Files.lines(versionFile)
+                .map(String::trim)
                 .filter(x -> x.matches("^v(\\d+\\.)+\\d+$"))
                 .findFirst()
                 .orElse(VERSION_UNKNOWN);

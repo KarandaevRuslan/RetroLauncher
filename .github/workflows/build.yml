@@ -34,6 +34,7 @@ jobs:
             version=${major}.${minor}.${patch}
           fi
           echo "version=${version}" >> $GITHUB_OUTPUT
+          echo "Detected version: $version"
 
   build-x64:
     name: Build x64
@@ -62,13 +63,13 @@ jobs:
       - name: Create VERSION file (Unix/macOS)
         if: matrix.os != 'windows-latest'
         run: |
-          echo "v${{ needs.determine_version.outputs.version }}" > target/RetroLauncher/VERSION
+          printf "v${{ needs.determine_version.outputs.version }}" > target/RetroLauncher/VERSION
 
       - name: Create VERSION file (Windows)
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
-          echo v${{ needs.determine_version.outputs.version }} > target\RetroLauncher\VERSION
+          @echo v${{ needs.determine_version.outputs.version }} > target\RetroLauncher\VERSION
 
       - name: Copy Updater.jar (Unix/macOS)
         if: matrix.os != 'windows-latest'
