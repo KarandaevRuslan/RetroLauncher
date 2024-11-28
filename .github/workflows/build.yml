@@ -67,9 +67,10 @@ jobs:
 
       - name: Create VERSION file (Windows)
         if: matrix.os == 'windows-latest'
-        shell: cmd
+        shell: pwsh
         run: |
-          <nul set /p="v${{ needs.determine_version.outputs.version }}"> target\RetroLauncher\VERSION
+          $version = "v${{ needs.determine_version.outputs.version }}"
+          Set-Content -NoNewline -Path 'target\RetroLauncher\VERSION' -Value $version
 
       - name: Copy Updater.jar (Unix/macOS)
         if: matrix.os != 'windows-latest'
