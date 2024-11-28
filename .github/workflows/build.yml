@@ -56,17 +56,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Providing access to all tags
 
-      - name: Download artifacts
+      - name: Download artifacts - Ubuntu
         uses: actions/download-artifact@v4
         with:
           name: RetroLauncher-ubuntu-latest-x64
           path: artifacts/ubuntu
-      - uses: actions/download-artifact@v4
+
+      - name: Download artifacts - Windows
+        uses: actions/download-artifact@v4
         with:
           name: RetroLauncher-windows-latest-x64
           path: artifacts/windows
-      - uses: actions/download-artifact@v4
+
+      - name: Download artifacts - macOS
+        uses: actions/download-artifact@v4
         with:
           name: RetroLauncher-macos-latest-x64
           path: artifacts/macos
@@ -79,13 +85,19 @@ jobs:
       - name: Determine release version
         id: vars
         run: |
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          # Trying to get the latest tag
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "")
           if [ -z "$latest_tag" ]; then
             echo "version=0.1.0" >> $GITHUB_OUTPUT
           else
-            IFS='.' read -r -a parts <<< "${latest_tag#v}"
-            patch=$((parts[2] + 1))
-            echo "version=${parts[0]}.${parts[1]}.$patch" >> $GITHUB_OUTPUT
+            # Deleting 'v' prefix if it is exist
+            latest_tag=${latest_tag#v}
+            IFS='.' read -r -a parts <<< "$latest_tag"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            patch=$((patch + 1))
+            echo "version=${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
           fi
 
       - name: Create Release
@@ -99,13 +111,31 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Compress Ubuntu Artifact
+        run: |
+          cd artifacts/ubuntu
+          zip -r RetroLauncher-ubuntu-latest-x64.zip RetroLauncher-ubuntu-latest-x64
+        shell: bash
+
+      - name: Compress Windows Artifact
+        run: |
+          cd artifacts/windows
+          zip -r RetroLauncher-windows-latest-x64.zip RetroLauncher-windows-latest-x64
+        shell: bash
+
+      - name: Compress macOS Artifact
+        run: |
+          cd artifacts/macos
+          zip -r RetroLauncher-macos-latest-x64.zip RetroLauncher-macos-latest-x64
+        shell: bash
+
       - name: Upload Release Assets - Ubuntu
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/ubuntu/RetroLauncher-ubuntu-latest-x64
+          asset_path: ./artifacts/ubuntu/RetroLauncher-ubuntu-latest-x64.zip
           asset_name: RetroLauncher-ubuntu-latest-x64.zip
           asset_content_type: application/zip
 
@@ -115,7 +145,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/windows/RetroLauncher-windows-latest-x64
+          asset_path: ./artifacts/windows/RetroLauncher-windows-latest-x64.zip
           asset_name: RetroLauncher-windows-latest-x64.zip
           asset_content_type: application/zip
 
@@ -125,6 +155,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/macos/RetroLauncher-macos-latest-x64
+          asset_path: ./artifacts/macos/RetroLauncher-macos-latest-x64.zip
           asset_name: RetroLauncher-macos-latest-x64.zip
           asset_content_type: application/zip
