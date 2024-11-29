@@ -72,6 +72,7 @@ public class Updater {
           || os.contains("nux")
           || os.contains("aix")) {
         mainApp = appDir.resolve("RetroLauncher.sh");
+        new ProcessBuilder("chmod", "+x", mainApp.toString()).start();
       } else {
         LogManager.getLogger().severe("Unknown OS");
         System.exit(1);
