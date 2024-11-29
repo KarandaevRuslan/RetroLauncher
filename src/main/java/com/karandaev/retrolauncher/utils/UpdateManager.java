@@ -116,6 +116,7 @@ public class UpdateManager {
     try {
       Release latestRelease = getLatestRelease();
       String os = System.getProperty("os.name").toLowerCase();
+      LogManager.getLogger().info("Your os is " + os);
       if (os.contains("win")) {
         return latestRelease.getAssets().stream()
             .filter(asset -> asset.getBrowserDownloadUrl().contains("windows"))
@@ -132,7 +133,7 @@ public class UpdateManager {
             .findFirst()
             .map(Asset::getBrowserDownloadUrl);
       }
-      LogManager.getLogger().warning("Can not determine os: " + os);
+
     } catch (IOException e) {
       e.printStackTrace();
       LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
