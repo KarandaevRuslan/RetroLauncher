@@ -135,7 +135,7 @@ public class UpdateManager {
       LogManager.getLogger().warning("Can not determine os: " + os);
     } catch (IOException e) {
       e.printStackTrace();
-      LogManager.getLogger().severe(e.getMessage());
+      LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
     }
 
     return Optional.empty();
