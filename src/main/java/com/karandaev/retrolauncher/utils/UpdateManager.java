@@ -87,25 +87,28 @@ public class UpdateManager {
     alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
     Optional<ButtonType> result = alert.showAndWait();
     if (result.isPresent() && result.get() == ButtonType.YES) {
-      try {
-        Platform.runLater(
-            () -> {
-              Alert waitAlert =
-                  getAlert(
-                      clazz,
-                      Alert.AlertType.INFORMATION,
-                      LanguageManager.getResourceBundle().getString("alert.wait.updating.title"),
-                      null,
-                      LanguageManager.getResourceBundle().getString("alert.wait.updating.content"));
-              waitAlert.getButtonTypes().clear();
-              waitAlert.initModality(Modality.APPLICATION_MODAL);
-              waitAlert.show();
-            });
-        downloadAndUpdate(downloadUrl);
-      } catch (IOException e) {
-        LogManager.getLogger().severe(e.getMessage());
-        e.printStackTrace();
-      }
+
+      Alert waitAlert =
+          getAlert(
+              clazz,
+              Alert.AlertType.INFORMATION,
+              LanguageManager.getResourceBundle().getString("alert.wait.updating.title"),
+              null,
+              LanguageManager.getResourceBundle().getString("alert.wait.updating.content"));
+      waitAlert.getButtonTypes().clear();
+      waitAlert.initModality(Modality.APPLICATION_MODAL);
+      waitAlert.show();
+      Thread t =
+          new Thread(
+              () -> {
+                try {
+                  downloadAndUpdate(downloadUrl);
+                } catch (IOException e) {
+                  e.printStackTrace();
+                  LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
+                  throw new RuntimeException(e);
+                }
+              });
     }
   }
 
