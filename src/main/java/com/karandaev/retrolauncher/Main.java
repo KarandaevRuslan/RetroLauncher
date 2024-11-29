@@ -6,7 +6,6 @@ import com.karandaev.retrolauncher.model.UserProfile;
 import com.karandaev.retrolauncher.utils.ConfigManager;
 import com.karandaev.retrolauncher.utils.LanguageManager;
 import com.karandaev.retrolauncher.utils.LogManager;
-import com.karandaev.retrolauncher.utils.UpdateManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
@@ -21,17 +20,14 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Objects;
 import javafx.util.Pair;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /** Main application class for RetroLauncher. */
 public class Main extends Application {
@@ -42,6 +38,11 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
     try {
+      // Removes Updater.jar
+      if (new File("Updater.jar").exists()) {
+        new File("Updater.jar").delete();
+      }
+
       // Initialize configuration
       ConfigManager.getInstance().loadConfig();
 

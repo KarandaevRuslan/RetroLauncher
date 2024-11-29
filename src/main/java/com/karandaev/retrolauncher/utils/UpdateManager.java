@@ -231,6 +231,7 @@ public class UpdateManager {
           || os.contains("nux")
           || os.contains("aix")) {
         javaLocation = updateDir.resolve(Path.of("bin", "java"));
+        new ProcessBuilder("chmod", "+x", javaLocation.toString()).start();
       } else {
         LogManager.getLogger().severe("Unknown OS");
         return;
