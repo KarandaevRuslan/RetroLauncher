@@ -88,16 +88,19 @@ public class UpdateManager {
     Optional<ButtonType> result = alert.showAndWait();
     if (result.isPresent() && result.get() == ButtonType.YES) {
       try {
-        Alert waitAlert =
-            getAlert(
-                clazz,
-                Alert.AlertType.INFORMATION,
-                LanguageManager.getResourceBundle().getString("alert.wait.updating.title"),
-                null,
-                LanguageManager.getResourceBundle().getString("alert.wait.updating.content"));
-        waitAlert.getButtonTypes().clear();
-        waitAlert.initModality(Modality.APPLICATION_MODAL);
-        waitAlert.show();
+        Platform.runLater(
+            () -> {
+              Alert waitAlert =
+                  getAlert(
+                      clazz,
+                      Alert.AlertType.INFORMATION,
+                      LanguageManager.getResourceBundle().getString("alert.wait.updating.title"),
+                      null,
+                      LanguageManager.getResourceBundle().getString("alert.wait.updating.content"));
+              waitAlert.getButtonTypes().clear();
+              waitAlert.initModality(Modality.APPLICATION_MODAL);
+              waitAlert.show();
+            });
         downloadAndUpdate(downloadUrl);
       } catch (IOException e) {
         LogManager.getLogger().severe(e.getMessage());
