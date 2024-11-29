@@ -5,8 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
+import javafx.beans.property.Property;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogEvent;
+import javafx.stage.Modality;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -91,7 +96,8 @@ public class UpdateManager {
                 null,
                 LanguageManager.getResourceBundle().getString("alert.wait.updating.content"));
         waitAlert.getButtonTypes().clear();
-        waitAlert.showAndWait();
+        waitAlert.initModality(Modality.APPLICATION_MODAL);
+        waitAlert.show();
         downloadAndUpdate(downloadUrl);
       } catch (IOException e) {
         LogManager.getLogger().severe(e.getMessage());
