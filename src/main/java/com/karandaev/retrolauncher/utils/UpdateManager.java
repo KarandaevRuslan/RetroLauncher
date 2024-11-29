@@ -192,42 +192,13 @@ public class UpdateManager {
     LogManager.getLogger().info("Successfully downloaded update.");
 
     Path updateDir = Files.createTempDirectory("update_unpacked");
-    unzip(tempFile, updateDir);
+    ZipManager.unzip(tempFile.toString(), updateDir.toString());
 
     LogManager.getLogger().info("Successfully unpacked update.");
 
     launchUpdater(updateDir);
     Platform.exit();
     System.exit(0);
-  }
-
-  private static void unzip(Path zipFilePath, Path destDir) throws IOException {
-    LogManager.getLogger()
-        .info("zipFilePath=" + zipFilePath.toString() + "\ndestDir=" + destDir.toString());
-    try (var fs = FileSystems.newFileSystem(zipFilePath, (ClassLoader) null)) {
-      for (Path root : fs.getRootDirectories()) {
-        Files.walk(root)
-            .forEach(
-                source -> {
-                  try {
-                    Path destPath = destDir.resolve(root.relativize(source).toString());
-                    if (Files.isDirectory(source)) {
-                      if (!Files.exists(destPath)) {
-                        Files.createDirectory(destPath);
-                        LogManager.getLogger().info("Created directory " + destPath);
-                      }
-                    } else {
-                      Files.copy(source, destPath, StandardCopyOption.REPLACE_EXISTING);
-                      LogManager.getLogger()
-                          .info("Copied files from " + source + " to " + destPath);
-                    }
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                    LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
-                  }
-                });
-      }
-    }
   }
 
   private static void launchUpdater(Path updateDir) {
