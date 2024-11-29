@@ -86,6 +86,13 @@
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
+                            <addModules>
+                                java.base,
+                                java.net.ssl,
+                                java.security.sasl,
+                                java.security.jgss,
+                                java.security.cert
+                            </addModules>
                         </configuration>
                     </execution>
                 </executions>
