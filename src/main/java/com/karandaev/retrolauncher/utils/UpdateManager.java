@@ -132,9 +132,12 @@ public class UpdateManager {
             .findFirst()
             .map(Asset::getBrowserDownloadUrl);
       }
+      LogManager.getLogger().warning("Can not determine os: " + os);
     } catch (IOException e) {
       e.printStackTrace();
+      LogManager.getLogger().severe(e.getMessage());
     }
+
     return Optional.empty();
   }
 
