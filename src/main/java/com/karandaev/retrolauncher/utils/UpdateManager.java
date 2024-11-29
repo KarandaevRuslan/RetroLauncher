@@ -220,16 +220,17 @@ public class UpdateManager {
 
   private static void launchUpdater(Path updateDir) {
     try {
-      Path updaterJar = Path.of("Updater.jar");
+
+      Path updaterJar = updateDir.resolve("Updater.jar");
       Path javaLocation = null;
       String os = System.getProperty("os.name").toLowerCase();
       if (os.contains("win")) {
-        javaLocation = Path.of("bin", "java.exe");
+        javaLocation = updateDir.resolve(Path.of("bin", "java.exe"));
       } else if (os.contains("mac")
           || os.contains("nix")
           || os.contains("nux")
           || os.contains("aix")) {
-        javaLocation = Path.of("bin", "java");
+        javaLocation = updateDir.resolve(Path.of("bin", "java"));
       } else {
         LogManager.getLogger().severe("Unknown OS");
         return;
