@@ -109,6 +109,8 @@ public class UpdateManager {
                   throw new RuntimeException(e);
                 }
               });
+      t.setDaemon(true);
+      t.start();
     }
   }
 
