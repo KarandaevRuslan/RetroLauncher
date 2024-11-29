@@ -148,7 +148,6 @@ public class UpdateManager {
     conn.setRequestProperty("Accept", "application/vnd.github.v3+json");
     conn.setRequestProperty("User-Agent", "Java Update Checker");
 
-
     int responseCode = conn.getResponseCode();
     if (responseCode != HttpURLConnection.HTTP_OK) {
       throw new IOException("Failed to fetch latest release: HTTP error code : " + responseCode);
@@ -189,8 +188,12 @@ public class UpdateManager {
       Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
     }
 
+    LogManager.getLogger().info("Successfully downloaded update.");
+
     Path updateDir = Files.createTempDirectory("update_unpacked");
     unzip(tempFile, updateDir);
+
+    LogManager.getLogger().info("Successfully unpacked update.");
 
     launchUpdater(updateDir);
     Platform.exit();
@@ -231,7 +234,7 @@ public class UpdateManager {
                 "-jar",
                 updaterJar.toString(),
                 updateDir.toString(),
-                Path.of("./").toString())
+                new File("").getAbsolutePath())
             .start();
       } else {
         var msg = "Updater not found!";
