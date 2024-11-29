@@ -148,6 +148,7 @@ public class UpdateManager {
     conn.setRequestProperty("Accept", "application/vnd.github.v3+json");
     conn.setRequestProperty("User-Agent", "Java Update Checker");
 
+
     int responseCode = conn.getResponseCode();
     if (responseCode != HttpURLConnection.HTTP_OK) {
       throw new IOException("Failed to fetch latest release: HTTP error code : " + responseCode);
