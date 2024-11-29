@@ -109,7 +109,6 @@ public class UpdateManager {
                   throw new RuntimeException(e);
                 }
               });
-      t.setDaemon(true);
       t.start();
     }
   }
@@ -216,7 +215,6 @@ public class UpdateManager {
     LogManager.getLogger().info("Successfully unpacked update.");
 
     launchUpdater(updateDir);
-    Platform.exit();
     System.exit(0);
   }
 
