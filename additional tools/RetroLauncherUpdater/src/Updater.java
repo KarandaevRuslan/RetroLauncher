@@ -67,17 +67,17 @@ public class Updater {
       LogManager.getLogger().info("Your os is " + os);
       if (os.contains("win")) {
         mainApp = appDir.resolve("RetroLauncher.bat");
+        new ProcessBuilder(mainApp.toString()).start();
       } else if (os.contains("mac")
           || os.contains("nix")
           || os.contains("nux")
           || os.contains("aix")) {
         mainApp = appDir.resolve("RetroLauncher.sh");
-        new ProcessBuilder("chmod", "+x", mainApp.toString()).start();
+        new ProcessBuilder("./" + mainApp.toString()).start();
       } else {
         LogManager.getLogger().severe("Unknown OS");
         System.exit(1);
       }
-      new ProcessBuilder(mainApp.toString()).start();
       System.exit(0);
     } catch (IOException e) {
       e.printStackTrace();
