@@ -3,14 +3,17 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
 public class Updater {
-  public static void copyFolder(Path sourceFolder, Path destinationFolder) throws IOException {
+  public static void copyFolderContents(Path sourceFolder, Path destinationFolder)
+      throws IOException {
     // Check if sourceFolder exists and is a directory
     if (!Files.exists(sourceFolder) || !Files.isDirectory(sourceFolder)) {
       throw new IOException("Source folder does not exist or is not a directory: " + sourceFolder);
     }
 
-    // The target folder where we need to copy the source folder
-    Path targetFolder = destinationFolder.resolve(sourceFolder.getFileName());
+    // Ensure destination folder exists
+    if (!Files.exists(destinationFolder)) {
+      Files.createDirectories(destinationFolder);
+    }
 
     // Walk the file tree and copy each file/directory
     Files.walkFileTree(
@@ -19,8 +22,8 @@ public class Updater {
           @Override
           public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
               throws IOException {
-            // Compute the path in the target folder
-            Path targetDir = targetFolder.resolve(sourceFolder.relativize(dir));
+            // Compute the path in the destination folder
+            Path targetDir = destinationFolder.resolve(sourceFolder.relativize(dir));
             // Create the directory if it doesn't exist
             if (!Files.exists(targetDir)) {
               Files.createDirectories(targetDir);
@@ -31,8 +34,8 @@ public class Updater {
           @Override
           public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
               throws IOException {
-            // Compute the path in the target folder
-            Path targetFile = targetFolder.resolve(sourceFolder.relativize(file));
+            // Compute the path in the destination folder
+            Path targetFile = destinationFolder.resolve(sourceFolder.relativize(file));
             // Copy the file, replacing existing ones
             Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
             return FileVisitResult.CONTINUE;
@@ -50,7 +53,7 @@ public class Updater {
     Path appDir = Paths.get(args[1]);
 
     try {
-      copyFolder(updateDir, appDir);
+      copyFolderContents(updateDir, appDir);
 
       Path mainApp = appDir.resolve("RetroLauncher");
       new ProcessBuilder(mainApp.toString()).start();
