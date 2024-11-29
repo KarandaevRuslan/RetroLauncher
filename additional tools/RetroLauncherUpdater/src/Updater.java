@@ -73,7 +73,7 @@ public class Updater {
           || os.contains("nux")
           || os.contains("aix")) {
         mainApp = appDir.resolve("RetroLauncher.sh");
-        new ProcessBuilder("bash", mainApp.toString()).start();
+        new ProcessBuilder("/bin/bash", mainApp.toString()).start();
       } else {
         LogManager.getLogger().severe("Unknown OS");
         System.exit(1);
