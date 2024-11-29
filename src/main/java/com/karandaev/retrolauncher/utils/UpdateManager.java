@@ -129,7 +129,7 @@ public class UpdateManager {
             .map(Asset::getBrowserDownloadUrl);
       } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
         return latestRelease.getAssets().stream()
-            .filter(asset -> asset.getBrowserDownloadUrl().contains("linux"))
+            .filter(asset -> asset.getBrowserDownloadUrl().contains("ubuntu"))
             .findFirst()
             .map(Asset::getBrowserDownloadUrl);
       }
@@ -202,6 +202,8 @@ public class UpdateManager {
   }
 
   private static void unzip(Path zipFilePath, Path destDir) throws IOException {
+    LogManager.getLogger()
+        .info("zipFilePath=" + zipFilePath.toString() + "\ndestDir=" + destDir.toString());
     try (var fs = FileSystems.newFileSystem(zipFilePath, (ClassLoader) null)) {
       for (Path root : fs.getRootDirectories()) {
         Files.walk(root)
@@ -212,12 +214,16 @@ public class UpdateManager {
                     if (Files.isDirectory(source)) {
                       if (!Files.exists(destPath)) {
                         Files.createDirectory(destPath);
+                        LogManager.getLogger().info("Created directory " + destPath);
                       }
                     } else {
                       Files.copy(source, destPath, StandardCopyOption.REPLACE_EXISTING);
+                      LogManager.getLogger()
+                          .info("Copied files from " + source + " to " + destPath);
                     }
                   } catch (IOException e) {
                     e.printStackTrace();
+                    LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
                   }
                 });
       }
