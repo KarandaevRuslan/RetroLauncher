@@ -60,9 +60,7 @@ public class Updater {
     LogManager.getLogger().info("updateDir=" + updateDir + "\tappDir=" + appDir);
 
     try {
-      Thread.sleep(1000);
       copyFolderContents(updateDir, appDir);
-      Thread.sleep(1000);
 
       String os = System.getProperty("os.name").toLowerCase();
       Path mainApp = null;
@@ -86,8 +84,6 @@ public class Updater {
       e.printStackTrace();
       LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
       System.exit(1);
-    } catch (InterruptedException e) {
-      LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
-    }
+      }
   }
 }

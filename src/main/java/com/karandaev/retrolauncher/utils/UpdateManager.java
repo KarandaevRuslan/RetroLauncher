@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.io.IOException;
 
 import static com.karandaev.retrolauncher.Main.getAlert;
+import static com.karandaev.retrolauncher.utils.FileManager.deleteDirectoryRecursively;
 
 /** Utility class for checking and handling updates. */
 public class UpdateManager {
@@ -202,17 +203,22 @@ public class UpdateManager {
 
   private static void downloadAndUpdate(String downloadUrl) throws IOException {
     URL url = new URL(downloadUrl);
-    Path tempFile = Files.createTempFile("update", ".zip");
+    Path workingDir = new File("").toPath();
+    Path updateFile = workingDir.resolve("update.zip");
     try (InputStream in = url.openStream()) {
-      Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(in, updateFile, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    LogManager.getLogger().info("Successfully downloaded update.");
+    LogManager.getLogger().info("Successfully downloaded update to " + updateFile);
 
-    Path updateDir = Files.createTempDirectory("update_unpacked");
-    ZipManager.unzip(tempFile.toString(), updateDir.toString());
+    Path updateDir = workingDir.resolve("update_unpacked");
+    if (Files.exists(updateDir)) {
+      deleteDirectoryRecursively(updateDir);
+    }
+    Files.createDirectory(updateDir);
+    ZipManager.unzip(updateFile.toString(), updateDir.toString());
 
-    LogManager.getLogger().info("Successfully unpacked update.");
+    LogManager.getLogger().info("Successfully unpacked update to " + updateDir.toString());
 
     launchUpdater(updateDir);
     System.exit(0);

@@ -29,6 +29,8 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
 
+import static com.karandaev.retrolauncher.utils.FileManager.cleanUp;
+
 /** Main application class for RetroLauncher. */
 public class Main extends Application {
   public static final String PROGRAM_NAME = "Retro Launcher";
@@ -38,10 +40,8 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
     try {
-      // Removes Updater.jar
-      if (new File("Updater.jar").exists()) {
-        new File("Updater.jar").delete();
-      }
+      // Clean up update files and folders
+      cleanUp();
 
       // Initialize configuration
       ConfigManager.getInstance().loadConfig();
