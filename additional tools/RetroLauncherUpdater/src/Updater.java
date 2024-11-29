@@ -18,7 +18,7 @@ public class Updater {
     // Walk the file tree and copy each file/directory
     Files.walkFileTree(
         sourceFolder,
-        new SimpleFileVisitor<Path>() {
+        new SimpleFileVisitor<>() {
           @Override
           public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
               throws IOException {
@@ -32,12 +32,18 @@ public class Updater {
           }
 
           @Override
-          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-              throws IOException {
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             // Compute the path in the destination folder
             Path targetFile = destinationFolder.resolve(sourceFolder.relativize(file));
-            // Copy the file, replacing existing ones
-            Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            try {
+              // Copy the file, replacing existing ones
+              Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+              // If the file is in use or cannot be copied, log and skip it
+              LogManager.getLogger()
+                  .severe("Failed to copy file: " + file + " (" + e.getMessage() + ")");
+              // Continue with the next file
+            }
             return FileVisitResult.CONTINUE;
           }
         });
@@ -51,16 +57,30 @@ public class Updater {
 
     Path updateDir = Paths.get(args[0]);
     Path appDir = Paths.get(args[1]);
+    LogManager.getLogger().info("updateDir=" + updateDir + "\tappDir=" + appDir);
 
     try {
       copyFolderContents(updateDir, appDir);
 
-      Path mainApp = appDir.resolve("RetroLauncher");
+      String os = System.getProperty("os.name").toLowerCase();
+      Path mainApp = null;
+      LogManager.getLogger().info("Your os is " + os);
+      if (os.contains("win")) {
+        mainApp = appDir.resolve("RetroLauncher.bat");
+      } else if (os.contains("mac")
+          || os.contains("nix")
+          || os.contains("nux")
+          || os.contains("aix")) {
+        mainApp = appDir.resolve("RetroLauncher.sh");
+      } else {
+        LogManager.getLogger().severe("Unknown OS");
+        System.exit(1);
+      }
       new ProcessBuilder(mainApp.toString()).start();
-
       System.exit(0);
     } catch (IOException e) {
       e.printStackTrace();
+      LogManager.getLogger().severe(e.getClass() + " " + e.getMessage());
       System.exit(1);
     }
   }

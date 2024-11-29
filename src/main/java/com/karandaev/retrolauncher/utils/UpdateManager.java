@@ -71,28 +71,33 @@ public class UpdateManager {
     }
     String downloadUrl = downloadUrlOpt.get();
 
-    Platform.runLater(
-        () -> {
-          Alert alert =
-              getAlert(
-                  clazz,
-                  Alert.AlertType.INFORMATION,
-                  LanguageManager.getResourceBundle().getString("menu.application.update"),
-                  null,
-                  LanguageManager.getResourceBundle()
-                      .getString("alert.update.application.content"));
-          alert.getButtonTypes().clear();
-          alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-          Optional<ButtonType> result = alert.showAndWait();
-          if (result.isPresent() && result.get() == ButtonType.YES) {
-            try {
-              downloadAndUpdate(downloadUrl);
-            } catch (IOException e) {
-              LogManager.getLogger().severe(e.getMessage());
-              e.printStackTrace();
-            }
-          }
-        });
+    Alert alert =
+        getAlert(
+            clazz,
+            Alert.AlertType.INFORMATION,
+            LanguageManager.getResourceBundle().getString("menu.application.update"),
+            null,
+            LanguageManager.getResourceBundle().getString("alert.update.application.content"));
+    alert.getButtonTypes().clear();
+    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+    Optional<ButtonType> result = alert.showAndWait();
+    if (result.isPresent() && result.get() == ButtonType.YES) {
+      try {
+        Alert waitAlert =
+            getAlert(
+                clazz,
+                Alert.AlertType.INFORMATION,
+                LanguageManager.getResourceBundle().getString("alert.wait.updating.title"),
+                null,
+                LanguageManager.getResourceBundle().getString("alert.wait.updating.content"));
+        waitAlert.getButtonTypes().clear();
+        waitAlert.showAndWait();
+        downloadAndUpdate(downloadUrl);
+      } catch (IOException e) {
+        LogManager.getLogger().severe(e.getMessage());
+        e.printStackTrace();
+      }
+    }
   }
 
   private static boolean isUpdateAvailable() {
@@ -204,7 +209,19 @@ public class UpdateManager {
   private static void launchUpdater(Path updateDir) {
     try {
       Path updaterJar = Path.of("Updater.jar");
-      Path javaLocation = Path.of("bin", "java");
+      Path javaLocation = null;
+      String os = System.getProperty("os.name").toLowerCase();
+      if (os.contains("win")) {
+        javaLocation = Path.of("bin", "java.exe");
+      } else if (os.contains("mac")
+          || os.contains("nix")
+          || os.contains("nux")
+          || os.contains("aix")) {
+        javaLocation = Path.of("bin", "java");
+      } else {
+        LogManager.getLogger().severe("Unknown OS");
+        return;
+      }
 
       if (Files.exists(updaterJar)) {
         new ProcessBuilder(
