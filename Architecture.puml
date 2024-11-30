@@ -1,0 +1,417 @@
+@startuml
+class com.karandaev.retrolauncher.utils.LogManager {
+- {static} Logger logger
++ {static} Logger getLogger()
+}
+
+
+class com.karandaev.retrolauncher.controller.ProfileSettingsController {
+- TextField usernameField
+- ComboBox<String> languageComboBox
+- ComboBox<String> themeComboBox
+- {static} Supplier<IController> reloadMainWindow
++ void initialize()
+- void applyProfileSettings()
+- void reloadWindow()
++ {static} void setReloadMainWindow(Supplier<IController>)
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.utils.ZipManager {
++ {static} void unzip(String,String)
+- {static} String findCommonRoot(String)
+- {static} void extractFile(ZipInputStream,String)
+}
+
+class com.karandaev.retrolauncher.controller.MainController {
+- TableView<RomFile> romTableView
+- TableColumn<RomFile,String> romNameColumn
+- TableColumn<RomFile,String> romConsolesColumn
++ TableColumn<RomFile,String> romGenresColumn
+- TableColumn<RomFile,Boolean> romFavoriteColumn
+- TextField searchField
+- ComboBox<String> filterComboBox
+- ObservableList<RomFile> romList
+- FilteredList<RomFile> filteredData
++ void initialize()
+- void loadRomFiles()
+- void applyFilters()
+- void openProfileSettings()
++ void openProfileManager()
+- void manageEmulators()
+- void manageRoms()
+- void openEmulatorSelectionWindow(RomFile)
+- void exitApplication()
++ IController reloadWindow()
+- void toggleFavorite(RomFile)
+- void updateApplication()
+- void showHelpContents()
+- void showAbout()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.controller.EmulatorManagerController {
+- TableView<Emulator> emulatorTableView
+- TableColumn<Emulator,String> emulatorNameColumn
+- TableColumn<Emulator,String> emulatorPathColumn
+- TableColumn<Emulator,String> emulatorConsolesColumn
+- Button addEmulatorButton
+- ObservableList<Emulator> emulatorList
++ void initialize()
+- void addEmulator()
+- void editEmulator(Emulator)
+- void deleteEmulator(Emulator)
+- IController reloadWindow()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.controller.EditEmulatorController {
+- TextField nameField
+- TextField pathField
+- TextField consolesField
+- TextField launchParametersField
+- Button browseButton
+- Button saveButton
+- Button cancelButton
+- Emulator emulator
++ void initialize()
++ void setEmulator(Emulator)
+- boolean isInputValid()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.controller.HelpController {
+- WebView webView
++ void initialize()
+- void setTheme()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.controller.ProfileManagerController {
+- ListView<UserProfile> profileListView
+- Button createProfileButton
+- {static} Supplier<IController> reloadMainWindow
++ void initialize()
+- void handleMouseClick(MouseEvent)
+- void selectProfile(UserProfile)
+- void deleteProfile(UserProfile)
+- void openCreateProfileWindow()
+- void reloadWindow()
++ {static} void setReloadMainWindow(Supplier<IController>)
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.utils.FileManager {
++ {static} void cleanUp()
++ {static} void deleteDirectoryRecursively(Path)
+}
+
+class com.karandaev.retrolauncher.model.Emulator {
+- Integer id
+- String name
+- File executablePath
+- List<String> supportedConsoles
+- LaunchParameters launchParameters
++ <<Create>> Emulator()
++ <<Create>> Emulator(String,File,List<String>)
++ String getName()
++ void setName(String)
++ File getExecutablePath()
++ void setExecutablePath(File)
++ LaunchParameters getLaunchParameters()
++ void setLaunchParameters(LaunchParameters)
++ List<String> getSupportedConsoles()
++ Integer getId()
++ void setUniqueId(List<Emulator>)
++ boolean equals(Object)
++ int hashCode()
+}
+
+
+class com.karandaev.retrolauncher.utils.ConfigManager {
+- {static} ConfigManager instance
+- List<UserProfile> profiles
+- Integer currentUserProfileIndex
+- String configFilePath
+- <<Create>> ConfigManager()
++ {static} ConfigManager getInstance()
++ void loadConfig()
++ void saveConfig()
++ List<UserProfile> getProfiles()
++ Integer getCurrentUserProfileIndex()
++ void setCurrentUserProfileIndex(Integer)
++ UserProfile getCurrentUserProfile()
++ String getConfigFilePath()
+}
+
+
+class com.karandaev.retrolauncher.utils.ConfigManager$ConfigData {
+- List<UserProfile> profiles
+- Integer currentUserProfileIndex
++ <<Create>> ConfigData()
++ <<Create>> ConfigData(List<UserProfile>,Integer)
++ Integer getCurrentUserProfileIndex()
++ List<UserProfile> getProfiles()
+}
+
+
+class com.karandaev.retrolauncher.model.RomFile {
+- String name
+- File filePath
+- List<String> consoles
+- List<String> genres
+- Boolean favorite
+- Map<Integer,LaunchParameters> launchParameters
++ <<Create>> RomFile()
++ <<Create>> RomFile(String,File,List<String>,List<String>,Boolean,Map<Integer,LaunchParameters>)
++ String getName()
++ void setName(String)
++ File getFilePath()
++ void setFilePath(File)
++ List<String> getConsoles()
++ List<String> getGenres()
++ void setGenres(List<String>)
++ Boolean isFavorite()
++ void setFavorite(Boolean)
++ Map<Integer,LaunchParameters> getLaunchParameters()
++ void setLaunchParameters(Map<Integer,LaunchParameters>)
+}
+
+
+class com.karandaev.retrolauncher.Main {
++ {static} String PROGRAM_NAME
++ {static} String PROGRAM_ICON_PATH
++ {static} String THEME_CSS_BASE
++ void start(Stage)
++ {static} void setTheme(String)
++ {static} void reloadWindow(Stage,Stage)
++ {static} Pair<Stage,IController> getWindow(Class<?>,String,String)
++ {static} Pair<Stage,IController> getWindow(Class<?>,String,String,String)
++ {static} Alert getAlert(Class<?>,Alert.AlertType,String,String,String)
++ {static} Alert getAlert(Class<?>,Alert.AlertType,String,String,String,String)
++ {static} void centerColumnHeaderText(TableColumn<?,?>)
++ {static} void selectOnDriveAndUpdateStringProperty(Scene,StringProperty,String,int)
++ void stop()
++ {static} void main(String[])
+}
+
+
+class com.karandaev.retrolauncher.controller.EmulatorSelectionController {
+- VBox emulatorButtonContainer
+- Button cancelButton
++ void initialize()
++ void populateEmulatorButtons(List<Emulator>,RomFile)
++ {static} void launchRomWithEmulator(Class<?>,Emulator,RomFile)
+- {static} String combineAndReplacePlaceholders(String,String,String)
+- {static} List<String> parseArguments(String)
+- void closeWindow()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.controller.EditRomController {
+- TextField nameField
+- TextField pathField
+- TextField consolesField
+- TextField genresField
+- CheckBox favoriteCheckBox
+- Button browseButton
+- Button saveButton
+- Button cancelButton
+- TitledPane launchParametersPane
+- GridPane launchParametersGrid
+- RomFile rom
++ void initialize()
++ void setRom(RomFile)
+- void populateLaunchParameters()
+- Emulator findEmulatorByName(String)
+- void animateWindowHeight(Stage,Boolean)
+- boolean isInputValid()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.controller.ProfileCreateController {
+- TextField usernameField
+- ComboBox<String> languageComboBox
+- ComboBox<String> themeComboBox
+- ComboBox<String> baseProfileComboBox
+- {static} String username
+- {static} String baseProfile
+- {static} String languageShort
+- {static} String themeEn
++ void initialize()
+- void createNewProfile()
+- void reloadWindow()
+- {static} void setDefaultStaticFields()
+- void onClosing()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.utils.LanguageManager {
+- {static} Locale locale
+- {static} ResourceBundle resourceBundle
++ {static} void setLocale(Locale)
++ {static} ResourceBundle getResourceBundle()
++ {static} List<String> getAllTranslates(String)
+}
+
+
+class com.karandaev.retrolauncher.controller.RomManagerController {
+- TableView<RomFile> romTableView
+- TableColumn<RomFile,String> romNameColumn
+- TableColumn<RomFile,String> romPathColumn
+- TableColumn<RomFile,String> romConsolesColumn
+- TableColumn<RomFile,String> romGenresColumn
+- TableColumn<RomFile,Boolean> romFavoriteColumn
+- Button addRomButton
+- ObservableList<RomFile> romList
+- {static} Supplier<IController> reloadMainWindow
++ void initialize()
+- void addRom()
+- void editRom(RomFile)
+- void deleteRom(RomFile)
+- IController reloadWindow()
++ {static} void setReloadMainWindow(Supplier<IController>)
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.model.LaunchParameters {
+- String launchParameters
++ <<Create>> LaunchParameters()
++ String getLaunchParameters()
++ void setLaunchParameters(String)
+}
+
+
+interface com.karandaev.retrolauncher.controller.interfaces.IController {
+~ ReadOnlyObjectProperty<Scene> getSceneProperty()
+~ Scene getScene()
+}
+
+class com.karandaev.retrolauncher.controller.AddEmulatorController {
+- TextField nameField
+- TextField pathField
+- TextField consolesField
+- Button browseButton
+- Button saveButton
+- Button cancelButton
+- Emulator newEmulator
++ void initialize()
+- boolean isInputValid()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+class com.karandaev.retrolauncher.model.UserProfile {
+- String username
+- String preferredLanguageShort
+- String preferredThemeEn
+- List<Emulator> emulators
+- List<RomFile> roms
++ <<Create>> UserProfile()
++ <<Create>> UserProfile(String)
++ <<Create>> UserProfile(UserProfile)
++ String getUsername()
++ void setUsername(String)
++ String getPreferredLanguage()
++ String getPreferredTheme()
++ String getPreferredThemeEn()
++ void setPreferredThemeEn(String)
++ String getPreferredLanguageShort()
++ void setPreferredLanguageShort(String)
++ List<Emulator> getEmulators()
++ List<RomFile> getRoms()
+}
+
+
+class com.karandaev.retrolauncher.utils.UpdateManager {
+- {static} String GITHUB_API_URL
+- {static} String VERSION_PATH
++ {static} String VERSION_UNKNOWN
+- {static} ObjectMapper objectMapper
++ {static} String getVersion()
++ {static} void tryUpdate(Class<?>)
+- {static} boolean isUpdateAvailable()
+- {static} Optional<String> getDownloadUrl()
+- {static} Release getLatestRelease()
+- {static} boolean isVersionNewer(String,String)
+- {static} void downloadAndUpdate(String)
+- {static} void launchUpdater(Path)
+}
+
+
+class com.karandaev.retrolauncher.utils.UpdateManager$Release {
+- String tagName
+- List<Asset> assets
++ <<Create>> Release()
++ String getTagName()
++ void setTagName(String)
++ List<Asset> getAssets()
++ void setAssets(List<Asset>)
+}
+
+
+class com.karandaev.retrolauncher.utils.UpdateManager$Asset {
+- String browserDownloadUrl
++ <<Create>> Asset()
++ String getBrowserDownloadUrl()
++ void setBrowserDownloadUrl(String)
+}
+
+
+class com.karandaev.retrolauncher.controller.AddRomController {
+- TextField nameField
+- TextField pathField
+- TextField consolesField
+- TextField genresField
+- CheckBox favoriteCheckBox
+- Button browseButton
+- Button saveButton
+- Button cancelButton
+- RomFile newRom
++ void initialize()
+- boolean isInputValid()
++ ReadOnlyObjectProperty<Scene> getSceneProperty()
++ Scene getScene()
+}
+
+
+
+
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.ProfileSettingsController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.MainController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.EmulatorManagerController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.EditEmulatorController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.HelpController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.ProfileManagerController
+com.karandaev.retrolauncher.utils.ConfigManager +.. com.karandaev.retrolauncher.utils.ConfigManager$ConfigData
+javafx.application.Application <|-- com.karandaev.retrolauncher.Main
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.EmulatorSelectionController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.EditRomController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.ProfileCreateController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.RomManagerController
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.AddEmulatorController
+com.karandaev.retrolauncher.utils.UpdateManager +.. com.karandaev.retrolauncher.utils.UpdateManager$Release
+com.karandaev.retrolauncher.utils.UpdateManager +.. com.karandaev.retrolauncher.utils.UpdateManager$Asset
+com.karandaev.retrolauncher.controller.interfaces.IController <|.. com.karandaev.retrolauncher.controller.AddRomController
+@enduml
