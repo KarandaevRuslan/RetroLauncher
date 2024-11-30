@@ -13,8 +13,9 @@
 RetroLauncher is a JavaFX-based application designed to simplify launching various emulators. It provides a user-friendly interface to manage and launch games via selected emulators.
 
 ## Screenshots
-
-*Screenshots of the application interface can be added here.*
+| Main window      | Emulators window       | ROM manager window       |
+|------------------|------------------|------------------|
+| ![Main window](images/Main.png) | ![Emulators window](images/Emulators.png) | ![ROM manager window](images/ROM%20manager.png) |
 
 ## Requirements
 
@@ -74,7 +75,7 @@ mvn test
 
 ## Architecture
 
-*Description of the application architecture will be added later.*
+![Architecture diagram](images/Architecture.png)
 
 ## Contributing
 
