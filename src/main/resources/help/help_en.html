@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Manual - Emulator Launcher</title>
+    <title>User Manual - RetroLauncher</title>
     <link id="theme-link" rel="stylesheet" href="light.css">
 </head>
 <body>
 <header>
-    <h1>Emulator Launcher - User Manual</h1>
+    <h1>RetroLauncher - User Manual</h1>
 </header>
 <nav>
     <ul>
         <li><a href="#introduction">Introduction</a></li>
-        <li><a href="#installation">Installation</a></li>
         <li><a href="#configuration">Configuration</a></li>
         <li><a href="#usage">Usage</a></li>
+        <li><a href="#parameters">Launch Parameters</a></li>
         <li><a href="#troubleshooting">Troubleshooting</a></li>
         <li><a href="#faq">FAQ</a></li>
     </ul>
@@ -22,54 +22,50 @@
 <main>
     <section id="introduction">
         <h2>Introduction</h2>
-        <p>Welcome to the Emulator Launcher! This application allows you to launch various emulators with an easy-to-use interface.</p>
-    </section>
-    <section id="installation">
-        <h2>Installation</h2>
-        <ol>
-            <li>Download the latest version of the launcher from our website.</li>
-            <li>Run the installer and follow the on-screen instructions.</li>
-            <li>After installation, launch the application from your desktop.</li>
-        </ol>
+        <p>Welcome to RetroLauncher! This tool allows you to manage and launch emulators and games with ease.</p>
     </section>
     <section id="configuration">
         <h2>Configuration</h2>
-        <p>Before first use, it is recommended to configure the launcher to suit your needs.</p>
         <ul>
-            <li>Select the emulators you want to use.</li>
-            <li>Set up paths to ROM files and BIOS.</li>
-            <li>Adjust preferred display and control settings.</li>
+            <li>Add emulators by providing their executable paths and supported consoles.</li>
+            <li>Add ROMs with associated consoles, genres, and favorite status.</li>
+            <li>Set global and per-game launch parameters.</li>
         </ul>
     </section>
     <section id="usage">
         <h2>Usage</h2>
-        <p>To start a game:</p>
         <ol>
-            <li>Select an emulator from the list.</li>
-            <li>Choose a game from your library.</li>
-            <li>Click the "Launch" button.</li>
+            <li>To launch a game, find it in the main table.</li>
+            <li>If a ROM supports one emulator, it launches immediately upon selection.</li>
+            <li>If multiple emulators are supported, a selection window will appear.</li>
         </ol>
-        <p>You can also set up hotkeys for quick access to functions.</p>
+    </section>
+    <section id="parameters">
+        <h2>Launch Parameters</h2>
+        <ul>
+            <li><code>{emu}</code>: Specifies the position of emulator parameters.</li>
+            <li><code>{rom}</code>: Specifies the position of the game file path.</li>
+            <li>Example: <code>--fullscreen {emu} {rom}</code></li>
+        </ul>
     </section>
     <section id="troubleshooting">
         <h2>Troubleshooting</h2>
-        <p>If you encounter issues:</p>
         <ul>
-            <li>Check if the file paths are correctly set.</li>
-            <li>Ensure all necessary files are present.</li>
-            <li>Contact our support team.</li>
+            <li>Ensure emulator and ROM paths are correct.</li>
+            <li>Check if required files are missing.</li>
+            <li>Contact support if issues persist.</li>
         </ul>
     </section>
     <section id="faq">
         <h2>Frequently Asked Questions</h2>
         <h3>How do I add a new emulator?</h3>
-        <p>Go to settings and click "Add Emulator". Follow the instructions.</p>
-        <h3>Can I change the interface language?</h3>
-        <p>Yes, you can change the interface language in the application settings.</p>
+        <p>Go to "Manage > Emulators" and fill in the required details.</p>
+        <h3>Can I adjust game launch parameters?</h3>
+        <p>Yes, parameters can be customized per game and emulator.</p>
     </section>
 </main>
 <footer>
-    <p>&copy; 2023 Emulator Launcher</p>
+    <p>&copy; 2024 RetroLauncher</p>
 </footer>
 </body>
 </html>
