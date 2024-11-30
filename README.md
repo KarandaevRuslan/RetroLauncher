@@ -75,7 +75,7 @@ mvn test
 
 ## Architecture
 
-![Architecture diagram](images/Architecture.png)
+![Architecture diagram](images/Architecture.svg)
 
 ## Contributing
 
