@@ -1,12 +1,9 @@
 
 # RetroLauncher
-
-**A simple launcher for emulators**
-
-## Badges
-
 ![Build](https://img.shields.io/github/actions/workflow/status/KarandaevRuslan/RetroLauncher/build.yml)
 ![License](https://img.shields.io/github/license/KarandaevRuslan/RetroLauncher)
+
+**A simple launcher for emulators**
 
 ## Description
 
