@@ -97,7 +97,6 @@ If you find a bug or have suggestions, please create an [Issue](https://github.c
 
 This project is licensed under the Apache 2.0 License. See the [LICENSE](https://github.com/KarandaevRuslan/RetroLauncher/blob/master/LICENSE) file for details.
 
-## Authors
+## Author
 
 - **Ruslan Karandaev** — *Main developer* — [KarandaevRuslan](https://github.com/KarandaevRuslan)
-- **Maxim Muzalevskiy** — *Tester and Documentation writer* — [Muzalevskiy Maxim](https://github.com/rodor03)
